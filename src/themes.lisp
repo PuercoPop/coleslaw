@@ -27,6 +27,11 @@ any return value other than nil indicates the injection should be added."
   (:report (lambda (c stream)
              (format stream "Cannot find the theme: '~A'" (theme c)))))
 
+(define-condition template-does-not-exist (error)
+  ((template :initarg :template :reader template))
+  (:report (lambda (c stream)
+             (format stream "Cannot find the template '~A.html'" (template c)))))
+
 (defun theme-package (name)
   "Find the package matching the theme NAME or signal THEME-DOES-NOT-EXIST."
   (or (find-package (format nil "~:@(coleslaw.theme.~A~)" name))
@@ -34,7 +39,8 @@ any return value other than nil indicates the injection should be added."
 
 (defun theme-fn (name &optional (package (theme *config*)))
   "Find the symbol NAME inside PACKAGE which defaults to the theme package."
-  (find-symbol (princ-to-string name) (theme-package package)))
+  (or (find-symbol (princ-to-string name) (theme-package package))
+      (error 'template-does-not-exist :template name)))
 
 (defun compile-theme (theme)
   "Locate and compile the templates for the given THEME."
