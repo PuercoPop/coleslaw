@@ -6,6 +6,10 @@
   ((name :initarg :name :reader tag-name)
    (slug :initarg :slug :reader tag-slug)))
 
+(defmethod print-object ((obj tag) stream)
+  (print-unreadable-object (obj stream :type t)
+    (princ (tag-name obj) stream)))
+
 (defun make-tag (str)
   "Takes a string and returns a TAG instance with a name and slug."
   (let ((trimmed (string-trim " " str)))
