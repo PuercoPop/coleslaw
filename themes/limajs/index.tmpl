@@ -1,0 +1,42 @@
+{namespace coleslaw.theme.limajs}
+
+{template index}
+<h1 class="title">{$index.title}</h1>
+
+{foreach $obj in $index.content}
+  <div class="article-meta">
+    <a class="article-title" href="{$config.domain}/posts/{$obj.slug}.{$config.pageExt}">{$obj.title}</a>
+    <div class="date"> posted on {$obj.date}</div>
+    <div class="article">{$obj.text |noAutoescape}</div>
+  </div>
+{/foreach}
+
+
+// Cuando nos Juntamos
+
+{foreach $event in $index.events}
+  {if isFirst($event)}
+    <div class="event">
+      {$event.text |noAutoescape}
+    </div>
+  {/if}
+  {if isLast($event)}
+    <p>Puedes ver los eventos pasados <a href="{$config.domain}/eventos/">aquí</a></p>
+  {/if}
+{/foreach}
+  
+
+// Que decimos
+
+Ultimo Blog Post
+y link a demas posts
+
+// Que hacemos
+
+Link a shout-out index
+
+<div id="relative-nav">
+  {if $prev} <a href="{$prev}.{$config.pageExt}">Previous</a> {/if}
+  {if $next} <a href="{$next}.{$config.pageExt}">Next</a> {/if}
+</div>
+{/template}
