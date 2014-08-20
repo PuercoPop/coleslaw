@@ -1,0 +1,27 @@
+{namespace coleslaw.theme.limajs}
+
+{template home}
+<h1 class="title">Oh Hai</h1>
+
+// Cuando nos Juntamos
+
+<div class="event">
+  {$event.text |noAutoescape}
+  </div>
+  <p>Puedes ver los eventos pasados <a href="{$config.domain}/eventos/">aqu&iacute</a></p>
+  
+
+// Que decimos
+
+Ultimo Blog Post
+y link a demas posts
+
+// Que hacemos
+
+Link a shout-out index
+
+<div id="relative-nav">
+  {if $prev} <a href="{$prev}.{$config.pageExt}">Previous</a> {/if}
+  {if $next} <a href="{$next}.{$config.pageExt}">Next</a> {/if}
+</div>
+{/template}

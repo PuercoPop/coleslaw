@@ -1,10 +1,14 @@
 (defpackage :coleslaw-events
   (:use :cl)
-  (:export #:enable)
+  (:export #:enable
+           #:event
+)
   (:import-from :coleslaw #:*config*
+                          #:add-document
                           #:content
                           #:content-slug
                           #:content-text
+                          #:discover
                           #:index
                           #:find-all
                           #:publish
@@ -30,7 +34,7 @@
 (defmethod render ((object event) &key next prev)
   (declare (ignore next prev))
   (funcall (theme-fn 'event) (list :config *config*
-                                   :post object)))
+                                   :event object)))
 
 (defmethod publish ((doc-type (eql (find-class 'event))))
   (dolist (event (find-all 'event))
@@ -38,15 +42,17 @@
 
 ;; Index it
 
-(defclass event-index (index))
+(defclass event-index (index)
+  ())
 
 (defmethod discover ((doc-type (eql (find-class 'event-index))))
-  (let ((content (by-date (find-all 'event)))) ;; TODO bydate
-    (dolist (tag (all-events)) ;; TODO all-events
+  (let ((content (coleslaw::by-date (find-all 'event)))) ;; TODO bydate
+    (dolist (event (find-all 'event)) ;; TODO all-events
       (add-document (index-by-event event content))))) ;; TODO index-by-event
 
 (defun index-by-event (event content)
-  (make-instance 'event-index)) ;; I O U
+  (make-instance 'event-index
+                 :slug (slugify (title-of event)))) ;; I O U
 
 (defmethod publish ((doc-type (eql (find-class 'event-index))))
   ;; TODO: I'm pretty sure there is only one event index, fix this it reflects that.
